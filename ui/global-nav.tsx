@@ -5,6 +5,8 @@ import { useSelectedLayoutSegment } from 'next/navigation';
 import { MenuAlt2Icon, XIcon } from '@heroicons/react/solid';
 import clsx from 'clsx';
 import { useState } from 'react';
+import { Item, demos } from '@/lib/demos';
+import Logo from './logo';
 
 export function GlobalNav() {
   const [isOpen, setIsOpen] = useState(false);
@@ -18,12 +20,14 @@ export function GlobalNav() {
           className="group flex w-full items-center gap-x-2.5"
           onClick={close}
         >
-          {/* <div className="h-7 w-7 rounded-full border border-white/30 group-hover:border-white/50">
-            <NextLogo />
-          </div> */}
+          <div className="h-7 w-7 rounded-full border border-white/30 group-hover:border-white/50 flex justify-center items-center">
+            <div className="w-[70%] h-[70%] opacity-50 group-hover:opacity-100">
+              <Logo />
+            </div>
+          </div>
 
           <h3 className="font-semibold tracking-wide text-gray-400 group-hover:text-gray-50">
-            App Router
+            实用工具箱
           </h3>
         </Link>
       </div>
@@ -49,7 +53,7 @@ export function GlobalNav() {
         })}
       >
         <nav className="space-y-6 px-2 pb-24 pt-5">
-          {/* {demos.map((section) => {
+          {demos.map((section) => {
             return (
               <div key={section.name}>
                 <div className="mb-2 px-3 text-xs font-semibold uppercase tracking-wider text-gray-400/80">
@@ -63,7 +67,7 @@ export function GlobalNav() {
                 </div>
               </div>
             );
-          })} */}
+          })}
         </nav>
         {/* <Byline className="absolute hidden sm:block" /> */}
       </div>
@@ -72,19 +76,19 @@ export function GlobalNav() {
 }
 
 function GlobalNavItem({
-  // item,
+  item,
   close,
 }: {
-  // item: Item;
+  item: Item;
   close: () => false | void;
 }) {
   const segment = useSelectedLayoutSegment();
-  const isActive = false;
+  const isActive = item.slug === segment;
 
   return (
     <Link
       onClick={close}
-      href={`/}`}
+      href={item.slug.startsWith('http') ? item.slug : `/${item.slug}`}
       className={clsx(
         'block rounded-md px-3 py-2 text-sm font-medium hover:text-gray-300',
         {
@@ -93,7 +97,7 @@ function GlobalNavItem({
         },
       )}
     >
-      {/* {item.name} */}
+      {item.name}
     </Link>
   );
 }
