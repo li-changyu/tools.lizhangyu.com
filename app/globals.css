@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-
+svg {
+  width: 100%;
+  height: 100%;
 }

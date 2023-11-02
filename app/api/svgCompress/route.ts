@@ -20,7 +20,14 @@ export async function POST(req: Request) {
     const { data } = optimize(body.svg.trim(), {
       multipass: true,
       plugins: [
-        'preset-default',
+        {
+          name: 'preset-default',
+          params: {
+            overrides: {
+              removeViewBox: false
+            },
+          },
+        },
         {
           name: 'cleanupIds',
         },
@@ -30,6 +37,7 @@ export async function POST(req: Request) {
             prefix: () =>  getHashCode(body.svg.trim())?.toString() ?? ''
           }
         },
+        'removeXMLNS',
       ]
     })
     svg = data
