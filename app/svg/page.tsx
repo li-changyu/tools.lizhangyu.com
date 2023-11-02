@@ -2,29 +2,21 @@
 import Button from "@/ui/button";
 import { useEffect, useRef, useState } from "react";
 import ClipboardJS from 'clipboard'
-import clsx from "clsx";
+import toast, { Toaster } from 'react-hot-toast';
 
 const SVG_COPY_ID = 'svg-clipboard-input'
 
 export default function Page() {
   const textareaInput = useRef<HTMLTextAreaElement>(null)
   const [svgOutput, setSvgOutput] = useState('')
-  const [toastVisible, setToastVisible] = useState(false)
-
   useEffect(() => {
     const clipboard = new ClipboardJS(`#${SVG_COPY_ID}`)
-    clipboard.on('success', () => setToastVisible(true))
+    clipboard.on('success', () => toast.success('复制成功'))
+    clipboard.on('error', () => toast.error('复制失败'))
     return () => {
       clipboard.destroy()
     }
   }, [])
-
-  useEffect(() => {
-    if (!toastVisible) return
-    setTimeout(() => {
-      setToastVisible(false)
-    }, 1000)
-  }, [toastVisible])
 
   return (
     <>
@@ -52,7 +44,17 @@ export default function Page() {
           </div>
         </div>
       </div>
-      <div className={clsx('absolute left-[50%] top-0 rounded-lg px-3 py-1 text-sm font-medium pt-[4px] w-[80px] h-[40px] leading-[32px] bg-gray-700 align-middle transition-opacity duration-300', {'opacity-0': !toastVisible, 'opacity-1': toastVisible })}>复制成功</div>
+      <Toaster 
+        position="top-center" 
+        toastOptions={{
+          duration: 2000, 
+          style: {
+            background: "rgba(63, 63, 70)",
+            color: "rgba(244, 244, 245)",
+            fontSize: "14px"
+          },
+        }}
+      />
     </>
   );
 }
