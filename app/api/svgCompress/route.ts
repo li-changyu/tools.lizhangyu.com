@@ -50,7 +50,7 @@ export async function POST(req: Request) {
   }
 
   return Response.json({
-    code: -1,
+    code: 0,
     data: {
       svg
     }
