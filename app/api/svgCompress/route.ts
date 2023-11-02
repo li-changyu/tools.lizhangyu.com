@@ -2,7 +2,7 @@ import { optimize } from 'svgo'
 import hash from 'string-hash'
 
 const getHashCode = (str: string) => {
-  return hash(str)
+  return hash(str).toString(36).slice(0,5)
 }
 
 export async function POST(req: Request) {
@@ -34,7 +34,8 @@ export async function POST(req: Request) {
         {
           name: 'prefixIds',
           params: {
-            prefix: () =>  getHashCode(body.svg.trim())?.toString() ?? ''
+            delim: '',
+            prefix: () =>  getHashCode(body.svg.trim()) ?? ''
           }
         },
         'removeXMLNS',

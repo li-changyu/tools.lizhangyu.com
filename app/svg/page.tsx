@@ -28,18 +28,25 @@ export default function Page() {
 
       <div className="flex justify-center relative mt-0">
         <Button onClick={async () => {
-          const result = await (await fetch('/api/svgCompress', {
-            method: 'POST',
-            body: JSON.stringify({
-              svg: textareaInput.current!.value
-            })
-          })).json()
+          try {
+            const result = await (await fetch('/api/svgCompress', {
+              method: 'POST',
+              body: JSON.stringify({
+                svg: textareaInput.current!.value
+              })
+            })).json()
 
-          if (result.data.svg) {
-            const percent = (textareaInput.current!.value.length - result.data.svg.length) /  textareaInput.current!.value.length
-            toast.success(`🎉压缩成功, 减少了${(percent * 100).toFixed(1)}%大小！`)
+            if (result.code !== 0) throw new Error(result.msg)
+  
+            if (result.data.svg) {
+              const percent = (textareaInput.current!.value.length - result.data.svg.length) /  textareaInput.current!.value.length
+              toast.success(`🎉压缩成功, 减少了${(percent * 100).toFixed(1)}%大小！`)
+            }
+            setSvgOutput(result.data.svg)
+          } catch (error: any) {
+            console.error(error)
+            toast.error(`压缩失败, 请检查输入 svg 是否正确`)
           }
-          setSvgOutput(result.data.svg)
         }}>压缩</Button>
 
         <div className="absolute left-0 top-[-10px] rounded-lg overflow-hidden">
