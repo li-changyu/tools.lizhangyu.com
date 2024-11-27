@@ -42,10 +42,10 @@ export async function POST(req: Request) {
       ]
     })
     svg = data
-  } catch (error: any) {
+  } catch (error) {
     return Response.json({
       code: -1,
-      msg: 'svg input parse error:' + error.message 
+      msg: error instanceof Error ? 'svg input parse error:' + error.message : 'svg compress failed.'
     });
   }
 

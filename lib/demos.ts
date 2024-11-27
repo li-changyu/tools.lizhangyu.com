@@ -13,6 +13,10 @@ export const demos: { name: string; items: Item[] }[] = [
         slug: 'svg',
       },
       {
+        name: 'five playground',
+        slug: 'five-playground',
+      },
+      {
         name: 'bundlephobia',
         slug: "https://bundlephobia.com/",
       },

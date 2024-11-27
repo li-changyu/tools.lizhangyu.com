@@ -29,7 +29,7 @@ export default function Page() {
       <div className="flex justify-center relative mt-0">
         <Button onClick={async () => {
           try {
-            const result = await (await fetch('/api/svgCompress', {
+            const result = await (await fetch('/api/svg-compress', {
               method: 'POST',
               body: JSON.stringify({
                 svg: textareaInput.current!.value
