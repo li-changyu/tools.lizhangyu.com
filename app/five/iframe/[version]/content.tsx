@@ -3,11 +3,28 @@
 import Button from "@/ui/button";
 import { FiveInitArgs, Mode, type Five } from "@realsee/five";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 
 declare var FiveSDK: {
   Five: typeof Five;
 };
+
+/**
+ * Use UMD version of FiveSDK, wait for it to be loaded
+ */
+export function waitForFiveSDK() {
+  const { promise, resolve } = Promise.withResolvers()
+  const loop = () => {
+    if (typeof FiveSDK !== 'undefined') {
+      return resolve(true);
+    }
+    requestAnimationFrame(loop);
+  }
+
+  loop();
+
+  return promise;
+}
 
 // copied from https://open-platform.realsee.com/developer/docs/five/quick-start/
 const fiveArgs = {
@@ -19,7 +36,8 @@ const fiveArgs = {
   },
 } satisfies FiveInitArgs;
 
-export default function Content() {
+export default function Content({ waitFiveSDK }: { waitFiveSDK: Promise<unknown> }) {
+  use(waitFiveSDK)
   const searchParams = useSearchParams();
   const [five] = useState(() => new FiveSDK.Five(fiveArgs));
   // @ts-ignore
