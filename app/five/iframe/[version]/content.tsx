@@ -14,7 +14,7 @@ declare var FiveSDK: {
 export function waitForFiveSDK() {
   const { promise, resolve } = Promise.withResolvers()
   const loop = () => {
-    if (typeof FiveSDK !== 'undefined') {
+    if (typeof FiveSDK !== 'undefined' && FiveSDK.hasOwnProperty('Five')) {
       return resolve(true);
     }
     requestAnimationFrame(loop);
