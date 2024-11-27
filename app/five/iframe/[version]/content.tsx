@@ -2,7 +2,6 @@
 
 import Button from "@/ui/button";
 import { FiveInitArgs, Mode, type Five } from "@realsee/five";
-import { useSearchParams } from "next/navigation";
 import { use, useEffect, useState } from "react";
 
 declare var FiveSDK: {
@@ -38,12 +37,12 @@ const fiveArgs = {
 
 export default function Content({ waitFiveSDK }: { waitFiveSDK: Promise<unknown> }) {
   use(waitFiveSDK)
-  const searchParams = useSearchParams();
   const [five] = useState(() => new FiveSDK.Five(fiveArgs));
   // @ts-ignore
   const currVersion = five.constructor.version;
   const modes = ["Panorama", "Floorplan", "Mapview", "Model"] satisfies Mode[];
-  const work = JSON.parse(searchParams.get('work')!);
+  // @ts-ignore
+  const work = parent.window.$work
   // @ts-ignore for debug
   if (!window.$five) Object.assign(window, { $five: five });
 

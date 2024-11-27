@@ -20,7 +20,13 @@ function Content({
 }: {
   data: Exclude<ReturnType<typeof useFiveVersions>["data"], undefined>;
 }) {
-  const [workData, setWorkData] = useState(workSample);
+  const [workData, setWorkData] = useState(() => {
+    // @ts-ignore
+    if (typeof window !== "undefined" && !window.$work) {
+      Object.assign(window, { $work: workSample });
+    }
+    return workSample;
+  });
   const [version, setVersion] = useState(data.latest);
 
   const inputRef = useRef<HTMLInputElement>(null);
@@ -71,6 +77,8 @@ function Content({
 
               setVersion(version);
               setWorkData(JSON.parse(workString));
+              // data too large, use window.$work to pass data to iframe
+              Object.assign(window, { $work: workData });
             }}
           >
             提交
@@ -80,9 +88,7 @@ function Content({
         <div className="pt-4">
           <iframe
             key={version + JSON.stringify(workData)}
-            src={`/five/iframe/${version}?work=${encodeURIComponent(
-              JSON.stringify(workData)
-            )}`}
+            src={`/five/iframe/${version}`}
             className="w-full h-[400px] rounded-lg overflow-hidden"
           ></iframe>
         </div>
